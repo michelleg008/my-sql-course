@@ -40,3 +40,12 @@ SELECT
     , h.Hospital
     , h.HospitalSize
 FROM PatientStay ps LEFT JOIN DimHospitalBad h ON ps.Hospital = h.Hospital
+
+SELECT
+    ps.PatientId 
+    ,ps.AdmittedDate
+    ,PS.Hospital
+    ,h.Hospital
+    ,h.HospitalSize
+FROM
+    PatientStay ps LEFT JOIN DimHospitalBad h ON ps.Hospital = h.Hospital
