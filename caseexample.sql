@@ -309,3 +309,23 @@ SELECT
 FROM p
 GROUP BY p.PatientTariffGroup
 ORDER BY p.PatientTariffGroup;
+
+-- Better CTE?
+;WITH p (PatientId, AdmittedDate, Tariff, PatientTariffGroup) AS
+    (SELECT
+            ps.PatientId
+                ,ps.AdmittedDate
+                ,ps.Tariff  
+            ,CASE WHEN ps.Tariff >= 7 THEN 'High Tariff'
+        WHEN ps.Tariff >= 4 THEN 'Medium Tariff'
+        ELSE 'Low Tariff'
+    END    
+     
+        FROM
+            dbo.PatientStay ps)
+SELECT
+    p.PatientTariffGroup
+    ,COUNT(*) AS NumberOfPatients
+FROM p
+GROUP BY p.PatientTariffGroup
+ORDER BY p.PatientTariffGroup;
