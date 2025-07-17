@@ -51,3 +51,39 @@ WHERE
     AND p.Price BETWEEN 400000 AND 500000
     AND p.Street = 'Cambray Road';
 
+-- Write a SQL query that Write a SQL query that lists the 25 latest sales in Ormeley Road with the following fields: 
+-- TransactionDate, Price, PostCode, PAON
+
+SELECT
+    p.TransactionDate
+    , p.Price
+    , p.PostCode
+    , p.PAON
+FROM 
+    PricePaidSW12 p
+WHERE
+    p.Street = 'Ormeley Road'
+ORDER BY
+    p.TransactionDate DESC
+
+
+
+-- standard select / where / order by
+SELECT
+    ps.PatientId
+    , ps.Hospital
+    , PS.Ward
+    , ps.AdmittedDate
+    , ps.DischargeDate
+    , DATEDIFF(DAY, ps.AdmittedDate, ps.DischargeDate) AS LengthOfStay
+    , DATEADD(WEEK, 2, ps.AdmittedDate) AS ReminderDate
+    , ps.Tariff
+FROM PatientStay ps
+WHERE ps.Hospital IN ('Kingston', 'PRUH')
+AND ps.Ward LIKE '%Surgery'
+AND ps.AdmittedDate BETWEEN '2024-02-27' AND '2024-03-01'
+AND ps.Tariff > 5
+ORDER BY
+    ps.AdmittedDate DESC,
+    ps.PatientId DESC
+
