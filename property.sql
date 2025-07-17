@@ -123,3 +123,46 @@ FROM
 WHERE Street = 'Ormeley Road'
 ORDER BY TransactionDate DESC
 
+-- after break
+-- CASE Expression
+
+SELECT TOP 25
+    p.TransactionDate
+    ,p.Price
+    ,p.PostCode
+    ,p.PAON
+    ,p.PropertyType
+    ,CASE -- Searched
+        WHEN p.PropertyType = 'T' THEN 'Terraced'
+        WHEN p.PropertyType = 'F' THEN 'Flat'
+        ELSE 'Unknown'
+    END as PropertyTypeName
+FROM
+    PricePaidSW12 p 
+WHERE Street = 'Ormeley Road'
+ORDER BY TransactionDate DESC
+
+
+-- Next
+SELECT
+    TOP 25
+    p.TransactionDate
+    ,p.Price
+    ,p.PostCode
+    ,p.PAON
+    , p.PropertyType
+    , CASE p.PropertyType  -- simple
+        WHEN 'F' THEN 'Flat'
+        WHEN 'T' THEN 'Terraced'
+        ELSE 'Unknown'
+    END AS PropertyTypeNameSimple
+    , CASE -- Searched
+        WHEN p.PropertyType IN ('D', 'S', 'T') THEN 'Freehold'
+        ELSE 'leasohold'
+    END AS PropertyDuration
+FROM
+    PricePaidSW12 AS p
+WHERE Street = 'Ormeley Road'  -- a very nice street in Balham
+ORDER BY TransactionDate DESC
+
+
