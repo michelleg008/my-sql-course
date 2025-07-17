@@ -41,9 +41,26 @@ SELECT
 FROM 
     PricePaidSW12 p;
 
+-- List all the sales in 2018 between £400,000 and £500,000 in Cambray Road (a street in SW12)
+SELECT
+    p.TransactionDate
+    ,p.Price
+    ,p.Street
+    ,p.County
+FROM
+    PricePaidSW12 p
+WHERE
+    p.Street = 'Cambray Road'
+    AND p.Price BETWEEN 400000 AND 500000
+    AND p.TransactionDate BETWEEN '2018-01-01' AND '2018-12-31'
+ORDER BY p.TransactionDate;
+
 -- List all the sales in 2018 between £400,000 and £500,000 in Cambray Road
 SELECT 
-    *
+    p.TransactionDate
+    ,p.Price
+    ,p.Street
+    ,p.County
 FROM 
     PricePaidSW12 p
 WHERE 
@@ -51,10 +68,24 @@ WHERE
     AND p.Price BETWEEN 400000 AND 500000
     AND p.Street = 'Cambray Road';
 
+-- List all the sales in 2018 between £400,000 and £500,000 in Cambray Road and Midmoor Road
+SELECT 
+    p.TransactionDate
+    ,p.Price
+    ,p.Street
+    ,p.County
+FROM 
+    PricePaidSW12 p
+WHERE 
+    YEAR(p.TransactionDate) IN (2018,2017)
+    AND p.Price > 400000
+    AND p.Street IN ('Cambray Road','Midoor Road')
+
+-- Homework Part 1
 -- Write a SQL query that Write a SQL query that lists the 25 latest sales in Ormeley Road with the following fields: 
 -- TransactionDate, Price, PostCode, PAON
 
-SELECT
+SELECT TOP 25
     p.TransactionDate
     , p.Price
     , p.PostCode
@@ -67,23 +98,28 @@ ORDER BY
     p.TransactionDate DESC
 
 
+-- Homework Part 2
+-- There is a table named PropertyTypeLookup .  This has columns PropertyTypeCode  and PropertyTypeName.  
+-- The values in PropertyTypeCode  match those in the PropertyType column of The PricePaidSW12 table.   
+-- The values in PropertyTypeName are the full name of the property type e.g. Flat, Terraced
+-- Write a SQL query that joins on table  PropertyTypeLookup to include column PropertyTypeName in the result.
 
--- standard select / where / order by
+-- Use to see column list
 SELECT
-    ps.PatientId
-    , ps.Hospital
-    , PS.Ward
-    , ps.AdmittedDate
-    , ps.DischargeDate
-    , DATEDIFF(DAY, ps.AdmittedDate, ps.DischargeDate) AS LengthOfStay
-    , DATEADD(WEEK, 2, ps.AdmittedDate) AS ReminderDate
-    , ps.Tariff
-FROM PatientStay ps
-WHERE ps.Hospital IN ('Kingston', 'PRUH')
-AND ps.Ward LIKE '%Surgery'
-AND ps.AdmittedDate BETWEEN '2024-02-27' AND '2024-03-01'
-AND ps.Tariff > 5
-ORDER BY
-    ps.AdmittedDate DESC,
-    ps.PatientId DESC
+    *
+FROM
+    PricePaidSW12 p
+
+
+SELECT TOP 25
+    p.TransactionDate
+    ,p.Price
+    ,p.PostCode
+    ,p.PAON
+    ,p.PropertyType
+    ,pt.PropertyTypeName
+FROM
+    PricePaidSW12 p LEFT JOIN PropertyTypeLookup pt ON p.PropertyType = pt.PropertyTypeCode
+WHERE Street = 'Ormeley Road'
+ORDER BY TransactionDate DESC
 
